@@ -1,99 +1,100 @@
 import { ConnectWallet } from "@thirdweb-dev/react";
 import "./styles/Home.css";
+import { useStateContext } from "./StateContextProvider";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import AuthPage from "./components/Authpage";
+
+import CustomerSign from "./components/CustomerSign";
+import RetailerSign from "./components/RetailerSign";
+import CustomerDashboard from "./components/CustomerDashboard";
+import RetailerDashboard from "./components/RetailerDashboard";
+import Products from "./components/Products";
 
 export default function Home() {
+  const [userBalance, setUserBalance] = useState("LOADING..");
+  const {
+    useContractRead,
+    useContractWrite,
+    earnTokensViaSpend,
+    redeemReward,
+    address,
+    contract,
+    connect,
+    balanceOf,
+  } = useStateContext();
+
   return (
-    <main className="main">
-      <div className="container">
-        <div className="header">
-          <h1 className="title">
-            Welcome to{" "}
-            <span className="gradient-text-0">
-              <a
-                href="https://thirdweb.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                thirdweb.
-              </a>
-            </span>
-          </h1>
+    // <div>
+    //   {!address ? (
+    //     <button
+    //       onClick={() => {
+    //         if (!address) {
+    //           connect();
+    //         }
+    //       }}
+    //     >
+    //       Button1
+    //     </button>
+    //   ) : (
+    //     <h1>{address}</h1>
+    //   )}
 
-          <p className="description">
-            Get started by configuring your desired network in{" "}
-            <code className="code">src/index.js</code>, then modify the{" "}
-            <code className="code">src/App.js</code> file!
-          </p>
+    //   <button
+    //     onClick={async () => {
+    //       try {
+    //         const { data } = await earnTokensViaSpend({
+    //           args: [
+    //             "0x13d6ff29FF49D16010c1318CA9Cb0f3b7C787cB7",
+    //             "0x77be04328B0511366CE76f5aB654da1D401D5bB4",
+    //             1000,
+    //           ],
+    //         });
+    //         console.info("contract call successs", data);
+    //       } catch (err) {
+    //         console.error("contract call failure", err);
+    //       }
+    //     }}
+    //   >
+    //     Button2
+    //   </button>
+    //   <button
+    //     onClick={() => {
+    //       setUserBalance(
+    //         ethers.utils.formatEther(parseInt(balanceOf._hex).toString())
+    //       );
+    //     }}
+    //   >
+    //     Button3
+    //   </button>
+    //   {userBalance}
+    // </div>
 
-          <div className="connect">
-            <ConnectWallet
-              dropdownPosition={{
-                side: "bottom",
-                align: "center",
-              }}
-            />
-          </div>
-        </div>
-
-        <div className="grid">
-          <a
-            href="https://portal.thirdweb.com/"
-            className="card"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="App">
+      <Router>
+        {/* {!address ? (
+          <button
+            onClick={() => {
+              if (!address) {
+                connect();
+              }
+            }}
           >
-            <img
-              src="/images/portal-preview.png"
-              alt="Placeholder preview of starter"
-            />
-            <div className="card-text">
-              <h2 className="gradient-text-1">Portal ➜</h2>
-              <p>
-                Guides, references, and resources that will help you build with
-                thirdweb.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/dashboard"
-            className="card"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/images/dashboard-preview.png"
-              alt="Placeholder preview of starter"
-            />
-            <div className="card-text">
-              <h2 className="gradient-text-2">Dashboard ➜</h2>
-              <p>
-                Deploy, configure, and manage your smart contracts from the
-                dashboard.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/templates"
-            className="card"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="/images/templates-preview.png"
-              alt="Placeholder preview of templates"
-            />
-            <div className="card-text">
-              <h2 className="gradient-text-3">Templates ➜</h2>
-              <p>
-                Discover and clone template projects showcasing thirdweb
-                features.
-              </p>
-            </div>
-          </a>
-        </div>
-      </div>
-    </main>
+            Button1
+          </button>
+        ) : (
+          <h1></h1>
+        )} */}
+        <Routes>
+          <Route path="/" element={<AuthPage />} />
+          <Route path="/customer" element={<CustomerSign />} />
+          <Route path="/retailer" element={<RetailerSign />} />
+          <Route path="customer/dashboard" element={<CustomerDashboard />} />
+          <Route path="retailer/dashboard" element={<RetailerDashboard />} />
+          <Route path="products" element={<Products />} />
+        </Routes>
+      </Router>
+    </div>
   );
 }
